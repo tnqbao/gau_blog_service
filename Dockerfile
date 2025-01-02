@@ -6,7 +6,7 @@ COPY . .
 RUN go build -o main .
 
 FROM alpine:latest
-WORKDIR /gau_user
+WORKDIR /gau_blog
 COPY --from=builder /gau_blog/main .
 EXPOSE 8085
 CMD ["./main"]
