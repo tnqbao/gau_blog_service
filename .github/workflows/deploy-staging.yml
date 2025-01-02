@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: iamqbao/gau_user_service:latest
+          tags: iamqbao/gau_blog_service:latest
 
       - name: Trigger deployment via SSH
         uses: appleboy/ssh-action@master
