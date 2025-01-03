@@ -11,6 +11,10 @@ type User struct {
 	Fullname string `json:"fullname"`
 }
 
+type BlogRequest struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}
 type BlogResponse struct {
 	ID        uint64             `json:"id"`
 	Title     string             `json:"title"`
