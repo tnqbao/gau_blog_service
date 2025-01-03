@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
+	err := godotenv.Load("/gau_blog/.env.blog")
 	if err != nil {
 		log.Fatalf("Error loading .env file: ", err)
 	}
