@@ -35,7 +35,7 @@ func GetBlogById(c *gin.Context) {
 		return
 	}
 
-	user, err := providers.GetUserByID(id)
+	user, err := providers.GetUserByID(blog.UserID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Lost author data of blog"})
 	}
