@@ -9,6 +9,6 @@ type Blog struct {
 	Body      string    `gorm:"not null;column:body"`
 	Upvote    int       `gorm:"default:0;column:upvote"`
 	Downvote  int       `gorm:"default:0;column:downvote"`
-	Comments  []Comment `gorm:"foreignKey:PostID;constraint:onDelete:CASCADE"`
+	Comments  []Comment `gorm:"foreignKey:BlogID;constraint:onDelete:CASCADE"`
 	CreatedAt time.Time `gorm:"autoCreateTime;column:created_at"`
 }
