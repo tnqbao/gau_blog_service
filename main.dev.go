@@ -1,4 +1,4 @@
-//go:build !dev
+//go:build dev
 
 package main
 
@@ -11,15 +11,12 @@ import (
 )
 
 func main() {
-	err := godotenv.Load("/gau_blog/.env.blog")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
-
 	config.InitRedis()
-
 	db := config.InitDB()
-
 	router := routes.SetupRouter(db)
 	router.Run(":8085")
 }

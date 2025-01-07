@@ -1,4 +1,4 @@
-package authed
+package blog
 
 import (
 	"log"
@@ -16,17 +16,23 @@ func CreateBlog(c *gin.Context) {
 	var req providers.BlogRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Println("UserRequest binding error:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format: " + err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error":  "Invalid request format: " + err.Error()})
 		return
 	}
 	tokenId, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Please login to access"})
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": http.StatusUnauthorized,
+			"error":  "Please login to access"})
 		return
 	}
 	tokenIdUint, ok := tokenId.(uint64)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user_id format in create blog"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": http.StatusInternalServerError,
+			"error":  "Invalid user_id format in create blog"})
 		return
 	}
 	blog := models.Blog{
@@ -45,8 +51,22 @@ func CreateBlog(c *gin.Context) {
 	})
 	if err != nil {
 		log.Println("Transaction error:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot create blog: " + err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": http.StatusInternalServerError,
+			"error":  "Cannot create blog: " + err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, "Create blog successfully!")
+
+	response := providers.BriefBlogResponse{
+		ID:        blog.ID,
+		Title:     blog.Title,
+		Body:      blog.Body,
+		CreatedAt: blog.CreatedAt,
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Create blog successfully!",
+		"blog":    response,
+	})
 }

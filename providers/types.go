@@ -25,3 +25,15 @@ type BlogResponse struct {
 	CreatedAt time.Time          `json:"createdAt"`
 	User      User               `json:"user"`
 }
+
+type BriefBlogResponse struct {
+	ID        uint64    `json:"id"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+type CommentRequest struct {
+	BlogID uint64 `json:"blog_id"`
+	Body   string `json:"body"`
+}
