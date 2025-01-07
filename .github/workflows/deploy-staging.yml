@@ -41,5 +41,5 @@ jobs:
           script: |
             cd ~/.operator
             sh restart_gau_blog_service_staging.sh
-            cd ~/gau
+            cd ~/gau_staging
             sh start.sh
