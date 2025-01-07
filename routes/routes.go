@@ -2,8 +2,8 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tnqbao/gau_blog_service/api/authed"
-	"github.com/tnqbao/gau_blog_service/api/public"
+	"github.com/tnqbao/gau_blog_service/api/blog"
+	"github.com/tnqbao/gau_blog_service/api/comment"
 	"github.com/tnqbao/gau_blog_service/middlewares"
 	"gorm.io/gorm"
 )
@@ -19,14 +19,25 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	{
 		forumRoutes := apiRoutes.Group("/forum")
 		{
-			authedRoutes := forumRoutes.Group("/authed")
+			blogRoutes := forumRoutes.Group("/blog")
 			{
-				authedRoutes.Use(middlewares.AuthMiddleware())
-				authedRoutes.PUT("/blog", authed.CreateBlog)
+				authedBlogRoutes := blogRoutes.Group("/")
+				{
+					authedBlogRoutes.Use(middlewares.AuthMiddleware())
+					authedBlogRoutes.POST("/:id", blog.UpdateBlogById)
+					authedBlogRoutes.DELETE("/:id", blog.DeleteBlogById)
+					authedBlogRoutes.PUT("/", blog.CreateBlog)
+				}
+				blogRoutes.GET("/:id", blog.GetBlogByID)
 			}
-			publicRoutes := forumRoutes.Group("/public")
+
+			commentRoutes := forumRoutes.Group("/comment")
 			{
-				publicRoutes.GET("/blog/:id", public.GetBlogById)
+				commentRoutes.Use(middlewares.AuthMiddleware())
+				commentRoutes.PUT("/", comment.CreateComment)
+				commentRoutes.DELETE("/:id", comment.DeleteCommentById)
+				//commentRoutes.GET("/:id", blog.GetComentsByBlogId)
+				commentRoutes.POST("/:id", comment.UpdateCommentById)
 			}
 		}
 	}
