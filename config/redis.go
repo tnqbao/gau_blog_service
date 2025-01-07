@@ -16,7 +16,7 @@ var (
 
 func InitRedis() {
 	once.Do(func() {
-		redisAddr := os.Getenv("REDIS_ADDR")
+		redisAddr := os.Getenv("REDIS_ADDRESS")
 		if redisAddr == "" {
 			redisAddr = "127.0.0.1:6379"
 		}
