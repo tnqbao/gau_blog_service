@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tnqbao/gau_blog_service/api/blog"
 	"github.com/tnqbao/gau_blog_service/api/comment"
+	"github.com/tnqbao/gau_blog_service/api/public"
+	"github.com/tnqbao/gau_blog_service/api/vote"
 	"github.com/tnqbao/gau_blog_service/middlewares"
 	"gorm.io/gorm"
 )
@@ -27,6 +29,15 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 					authedBlogRoutes.POST("/:id", blog.UpdateBlogById)
 					authedBlogRoutes.DELETE("/:id", blog.DeleteBlogById)
 					authedBlogRoutes.PUT("/", blog.CreateBlog)
+
+					voteRoutes := authedBlogRoutes.Group("/vote")
+					{
+						voteRoutes.PUT("upvote/:id", vote.AddUpVoteByBlogID)
+						voteRoutes.DELETE("upvote/:id", vote.DeleteUpvoteByBlogID)
+
+						voteRoutes.PUT("downvote/:id", vote.AddDownVoteByBlogID)
+						voteRoutes.DELETE("downvote/:id", vote.DeleteDownvoteByBlogID)
+					}
 				}
 				blogRoutes.GET("/:id", blog.GetBlogByID)
 			}
@@ -39,6 +50,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 				//commentRoutes.GET("/:id", blog.GetComentsByBlogId)
 				commentRoutes.POST("/:id", comment.UpdateCommentById)
 			}
+
+			forumRoutes.GET("/check", public.CheckHealth)
 		}
 	}
 	return r
