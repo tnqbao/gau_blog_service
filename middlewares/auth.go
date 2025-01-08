@@ -37,6 +37,10 @@ func AuthMiddleware() gin.HandlerFunc {
 			} else {
 				c.Set("permission", "")
 			}
+
+			if fullname, ok := claims["fullname"].(string); ok {
+				c.Set("fullname", fullname)
+			}
 		} else {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			c.Abort()
