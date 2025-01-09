@@ -57,7 +57,7 @@ func AddUpVoteByBlogID(c *gin.Context) {
 	}
 
 	err = db.Transaction(func(tx *gorm.DB) error {
-		updateResult := tx.Model(&models.Vote{}).Where("blog_id = ? AND user_id = ?", id, userID).Update("state", 1)
+		updateResult := tx.Model(&models.Vote{}).Where("blog_id = ? AND user_id = ?", id, userID).Update("state", true)
 		if updateResult.Error != nil {
 			return updateResult.Error
 		} else if updateResult.RowsAffected == 0 {
