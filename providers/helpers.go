@@ -7,7 +7,7 @@ import (
 )
 
 func GetUserByID(userID uint64) (*User, error) {
-	url := fmt.Sprintf("https://api.daudoo.com/api/user/public/user/%d", userID)
+	url := fmt.Sprintf("https://api.daudoo.com/api/user/%d", userID)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
