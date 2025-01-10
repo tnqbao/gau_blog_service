@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	Id       uint16 `json:"id"`
+	Id       uint64 `json:"user_id"`
 	Fullname string `json:"fullname"`
 }
 
@@ -36,4 +36,11 @@ type BriefBlogResponse struct {
 type CommentRequest struct {
 	BlogID uint64 `json:"blog_id"`
 	Body   string `json:"body"`
+}
+
+type ListBlogResponse struct {
+	Blogs       []BlogResponse `json:"blogs"`
+	ItemPerPage int            `json:"itemPerPage"`
+	TotalItem   int            `json:"totalItem"`
+	Page        int            `json:"page"`
 }

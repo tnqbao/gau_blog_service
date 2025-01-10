@@ -38,11 +38,11 @@ func DeleteUpvoteByBlogID(c *gin.Context) {
 		}
 
 		upvote--
-		err := redisClient.HSet(context.Background(), key, "upvote", upvote, "downvote", downvote).Err()
+		err := redisClient.Del(context.Background()).Err()
+		err = redisClient.HSet(context.Background(), key, "upvote", upvote, "downvote", downvote).Err()
 		if err != nil {
 			return err
 		}
-
 		return nil
 	})
 
