@@ -43,7 +43,7 @@ func AddUpVoteByBlogID(c *gin.Context) {
 	}
 
 	upvote++
-
+	err = redisClient.Del(ctx, key).Err()
 	err = redisClient.HSet(ctx, key, "upvote", upvote, "downvote", downvote).Err()
 	if err != nil {
 		c.JSON(500, gin.H{"status": 500, "error": "Redis error: " + err.Error()})

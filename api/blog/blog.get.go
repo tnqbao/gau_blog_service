@@ -60,8 +60,8 @@ func GetBlogByID(c *gin.Context) {
 			return
 		}
 
-		upvote := blog.Upvote + parseCacheValue(updownCache["upvote"])
-		downvote := blog.Downvote + parseCacheValue(updownCache["downvote"])
+		upvote := blog.Upvote + providers.ParseCacheValue(updownCache["upvote"])
+		downvote := blog.Downvote + providers.ParseCacheValue(updownCache["downvote"])
 
 		response = providers.BlogResponse{
 			ID:        blog.ID,
@@ -76,7 +76,7 @@ func GetBlogByID(c *gin.Context) {
 
 		cacheData, err := json.Marshal(response)
 		if err == nil {
-			_ = redisClient.Set(ctx, key, cacheData, 30*time.Minute).Err()
+			_ = redisClient.Set(ctx, key, cacheData, 1*time.Minute).Err()
 		}
 	} else if err != nil {
 		respondWithError(c, http.StatusInternalServerError, "Failed to fetch data from cache")
@@ -87,20 +87,9 @@ func GetBlogByID(c *gin.Context) {
 			return
 		}
 
-		response.Upvote += parseCacheValue(updownCache["upvote"])
-		response.Downvote += parseCacheValue(updownCache["downvote"])
+		response.Upvote += providers.ParseCacheValue(updownCache["upvote"])
+		response.Downvote += providers.ParseCacheValue(updownCache["downvote"])
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": response})
-}
-
-func parseCacheValue(cacheValue string) int {
-	if cacheValue == "" {
-		return 0
-	}
-	value, err := strconv.ParseUint(cacheValue, 10, 32)
-	if err != nil {
-		return 0
-	}
-	return int(value)
 }

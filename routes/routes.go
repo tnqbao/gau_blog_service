@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tnqbao/gau_blog_service/api/blog"
 	"github.com/tnqbao/gau_blog_service/api/comment"
+	"github.com/tnqbao/gau_blog_service/api/feeds"
 	"github.com/tnqbao/gau_blog_service/api/public"
 	"github.com/tnqbao/gau_blog_service/api/vote"
 	"github.com/tnqbao/gau_blog_service/middlewares"
@@ -51,6 +52,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 				commentRoutes.POST("/:id", comment.UpdateCommentById)
 			}
 
+			forumRoutes.GET("/new-feed/:page", feeds.GetNewFeed)
 			forumRoutes.GET("/check", public.CheckHealth)
 		}
 	}
