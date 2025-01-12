@@ -10,10 +10,10 @@ import (
 	"strconv"
 )
 
-func GetNewFeedPerPage(c *gin.Context) {
+func GetTredingPerPage(c *gin.Context) {
 	pageStr := c.Param("page")
 	ctx := context.Background()
-	key := "/api/forum/new-feed/" + pageStr
+	key := "/api/forum/treding/" + pageStr
 
 	if pageStr == "" {
 		c.JSON(400, gin.H{"status": 400, "error": "Please provide page number"})
@@ -28,7 +28,7 @@ func GetNewFeedPerPage(c *gin.Context) {
 		}
 
 		err = db.Preload("Comments").
-			Order("created_at desc").
+			Order("upvote desc").
 			Offset((page - 1) * 12).
 			Limit(12).
 			Find(&blogs).Error
@@ -47,6 +47,5 @@ func GetNewFeedPerPage(c *gin.Context) {
 	if blogsResponse == nil {
 		return
 	}
-
 	c.JSON(200, gin.H{"status": 200, "data": blogsResponse})
 }
