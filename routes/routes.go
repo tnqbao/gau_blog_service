@@ -52,7 +52,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 				commentRoutes.POST("/:id", comment.UpdateCommentById)
 			}
 
-			forumRoutes.GET("/new-feed/:page", feeds.GetNewFeed)
+			forumRoutes.GET("/new-feed/:page", feeds.GetNewFeedPerPage)
+			forumRoutes.GET("/trending/:page", feeds.GetTredingPerPage)
 			forumRoutes.GET("/check", public.CheckHealth)
 		}
 	}
