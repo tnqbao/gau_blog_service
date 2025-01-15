@@ -11,6 +11,7 @@ import (
 	"github.com/tnqbao/gau_blog_service/models"
 	"gorm.io/gorm"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -34,7 +35,8 @@ func GetUserByID(userID uint64) (*User, error) {
 }
 
 func GetListUser(userIDs []uint64) ([]User, error) {
-	url := "http://localhost/api/user/public/list"
+	endpoint := os.Getenv("API_DOMAIN")
+	url := endpoint + "api/user/public/list"
 	body, err := json.Marshal(map[string][]uint64{"ids": userIDs})
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling userIDs: %w", err)
@@ -216,15 +218,14 @@ func GetListBlog(c *gin.Context, ctx context.Context, key string, query func(db 
 
 func getUpDownVotes(ctx context.Context, redisClient *redis.Client, blogID uint64) (upvote, downvote int, err error) {
 	updownKey := "blog:" + strconv.Itoa(int(blogID)) + ":up-down"
-	updownCache, err := redisClient.HGetAll(ctx, updownKey).Result()
+	pipe := redisClient.Pipeline()
+	upvoteCmd := pipe.HGet(ctx, updownKey, "upvote")
+	downvoteCmd := pipe.HGet(ctx, updownKey, "downvote")
+	_, err = pipe.Exec(ctx)
 	if err != nil && err != redis.Nil {
 		return 0, 0, fmt.Errorf("redis error: %v", err)
 	}
-	if err == redis.Nil {
-		return 0, 0, nil
-	}
-
-	upvote = ParseCacheValue(updownCache["upvote"])
-	downvote = ParseCacheValue(updownCache["downvote"])
+	upvote = ParseCacheValue(upvoteCmd.Val())
+	downvote = ParseCacheValue(downvoteCmd.Val())
 	return
 }
