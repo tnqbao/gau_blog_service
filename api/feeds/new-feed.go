@@ -27,8 +27,7 @@ func GetNewFeedPerPage(c *gin.Context) {
 			return nil, fmt.Errorf("invalid page format")
 		}
 
-		err = db.Preload("Comments").
-			Order("created_at desc").
+		err = db.Order("created_at desc").
 			Offset((page - 1) * 12).
 			Limit(12).
 			Find(&blogs).Error
