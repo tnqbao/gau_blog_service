@@ -2,8 +2,6 @@ package providers
 
 import (
 	"time"
-
-	"github.com/tnqbao/gau_blog_service/models"
 )
 
 type User struct {
@@ -16,14 +14,13 @@ type BlogRequest struct {
 	Body  string `json:"body"`
 }
 type BlogResponse struct {
-	ID        uint64             `json:"id"`
-	Title     string             `json:"title"`
-	Body      string             `json:"body"`
-	Upvote    int                `json:"upvote"`
-	Downvote  int                `json:"downvote"`
-	Comments  [](models.Comment) `json:"comments"`
-	CreatedAt time.Time          `json:"createdAt"`
-	User      User               `json:"user"`
+	ID        uint64    `json:"id"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	Upvote    int       `json:"upvote"`
+	Downvote  int       `json:"downvote"`
+	CreatedAt time.Time `json:"createdAt"`
+	User      User      `json:"user"`
 }
 
 type BriefBlogResponse struct {

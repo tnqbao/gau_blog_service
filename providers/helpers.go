@@ -183,7 +183,6 @@ func GetListBlog(c *gin.Context, ctx context.Context, key string, query func(db 
 				Body:      blogs[i].Body,
 				Upvote:    upvote,
 				Downvote:  downvote,
-				Comments:  blogs[i].Comments,
 				CreatedAt: blogs[i].CreatedAt,
 				User: User{
 					Id:       user.Id,
