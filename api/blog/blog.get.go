@@ -45,7 +45,7 @@ func GetBlogByID(c *gin.Context) {
 		}
 
 		var blog models.Blog
-		if err := db.Preload("Comments").First(&blog, "id = ?", id).Error; err != nil {
+		if err := db.First(&blog, "id = ?", id).Error; err != nil {
 			if err == gorm.ErrRecordNotFound {
 				respondWithError(c, http.StatusNotFound, "Blog not found")
 			} else {
@@ -69,7 +69,6 @@ func GetBlogByID(c *gin.Context) {
 			Body:      blog.Body,
 			Upvote:    upvote,
 			Downvote:  downvote,
-			Comments:  blog.Comments,
 			CreatedAt: blog.CreatedAt,
 			User:      *user,
 		}

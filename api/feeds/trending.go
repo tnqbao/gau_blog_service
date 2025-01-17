@@ -27,8 +27,7 @@ func GetTredingPerPage(c *gin.Context) {
 			return nil, fmt.Errorf("invalid page format")
 		}
 
-		err = db.Preload("Comments").
-			Order("upvote desc").
+		err = db.Order("upvote desc").
 			Offset((page - 1) * 12).
 			Limit(12).
 			Find(&blogs).Error
