@@ -17,7 +17,8 @@ import (
 )
 
 func GetUserByID(userID uint64) (*User, error) {
-	url := fmt.Sprintf("http://localhost/api/user/public/%d", userID)
+	endpoint := os.Getenv("API_DOMAIN")
+	url := fmt.Sprintf(endpoint+"/api/user/public/%d", userID)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -36,7 +37,7 @@ func GetUserByID(userID uint64) (*User, error) {
 
 func GetListUser(userIDs []uint64) ([]User, error) {
 	endpoint := os.Getenv("API_DOMAIN")
-	url := endpoint + "api/user/public/list"
+	url := endpoint + "/api/user/public/list"
 	body, err := json.Marshal(map[string][]uint64{"ids": userIDs})
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling userIDs: %w", err)
@@ -84,7 +85,7 @@ func getCachedData(ctx context.Context, redisClient *redis.Client, key string, q
 		}
 		return data, nil
 	}
-	db := ctx.Value("db").(*gorm.DB) // Assuming db is passed in context
+	db := ctx.Value("db").(*gorm.DB)
 	blogs, err := query(db)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query blogs: %v", err)
@@ -129,7 +130,6 @@ func GetListBlog(c *gin.Context, ctx context.Context, key string, query func(db 
 
 	var blogsResponse []BlogResponse
 	if len(cache) > 0 {
-		// Cache hit, process cache
 		for _, blogStr := range cache {
 			var blog BlogResponse
 			err := json.Unmarshal([]byte(blogStr), &blog)
@@ -148,13 +148,11 @@ func GetListBlog(c *gin.Context, ctx context.Context, key string, query func(db 
 		return blogsResponse, nil
 	}
 
-	// Cache miss, fetch from database
 	blogs, err := query(gdb)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch blogs: %v", err)
 	}
 
-	// Process users and blogs
 	var userIDs []uint64
 	for _, blog := range blogs {
 		userIDs = append(userIDs, blog.UserID)
