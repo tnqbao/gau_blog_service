@@ -20,7 +20,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	})
 	apiRoutes := r.Group("/api")
 	{
-		forumRoutes := apiRoutes.Group("/forum")
+		forumRoutes := apiRoutes.Group("/storisy")
 		{
 			blogRoutes := forumRoutes.Group("/blog")
 			{
@@ -48,7 +48,6 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 				commentRoutes.Use(middlewares.AuthMiddleware())
 				commentRoutes.PUT("/", comment.CreateComment)
 				commentRoutes.DELETE("/:id", comment.DeleteCommentById)
-				//commentRoutes.GET("/:id", blog.GetComentsByBlogId)
 				commentRoutes.POST("/:id", comment.UpdateCommentById)
 			}
 

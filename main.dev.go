@@ -4,6 +4,7 @@ package main
 
 import (
 	"github.com/tnqbao/gau_blog_service/api/vote"
+	"github.com/tnqbao/gau_blog_service/lib/ai"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -16,8 +17,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
+
 	config.InitRedis()
 	db := config.InitDB()
+
+	ai.LoadAPIKeys()
 	router := routes.SetupRouter(db)
 	go vote.StartSyncJob(db)
 	router.Run(":8085")

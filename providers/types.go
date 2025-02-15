@@ -19,6 +19,7 @@ type BlogResponse struct {
 	Body      string    `json:"body"`
 	Upvote    int       `json:"upvote"`
 	Downvote  int       `json:"downvote"`
+	Tag       string    `json:"tag"`
 	CreatedAt time.Time `json:"createdAt"`
 	User      User      `json:"user"`
 }
@@ -27,6 +28,7 @@ type BriefBlogResponse struct {
 	ID        uint64    `json:"id"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
+	Tag       string    `json:"tag"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
